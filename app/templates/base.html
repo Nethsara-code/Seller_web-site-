@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="si">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}My Seller Site{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  </head>
+  <body>
+    <nav>
+      <a href="{{ url_for('main.index') }}">Home</a>
+      {% if current_user.is_authenticated %}
+        <span>Hello, {{ current_user.username }}</span>
+        {% if current_user.is_seller %}
+          <a href="{{ url_for('main.seller_dashboard') }}">Seller Dashboard</a>
+          <a href="{{ url_for('main.add_product') }}">Add Product</a>
+        {% else %}
+          <a href="{{ url_for('main.buyer_dashboard') }}">My Orders</a>
+        {% endif %}
+        <a href="{{ url_for('main.logout') }}">Logout</a>
+      {% else %}
+        <a href="{{ url_for('main.login') }}">Login</a>
+        <a href="{{ url_for('main.register') }}">Register</a>
+      {% endif %}
+      <a href="{{ url_for('main.view_cart') }}">Cart ({{ cart_count }})</a>
+    </nav>
+
+    <div class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <ul class="flashes">
+            {% for category, msg in messages %}
+              <li class="flash {{ category }}">{{ msg }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+    </div>
+  </body>
+</html>

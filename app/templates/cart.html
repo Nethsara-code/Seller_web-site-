@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Cart</h2>
+  {% if items %}
+    <table>
+      <tr><th>Product</th><th>Qty</th><th>Subtotal</th><th>Action</th></tr>
+      {% for it in items %}
+        <tr>
+          <td>{{ it.product.title }}</td>
+          <td>
+            <form method="post" action="{{ url_for('main.update_cart') }}">
+              {{ csrf_token() }}
+              <input type="hidden" name="product_id" value="{{ it.product.id }}">
+              <input type="number" name="quantity" value="{{ it.quantity }}" min="0">
+              <button type="submit">Update</button>
+            </form>
+          </td>
+          <td>Rs {{ "%.2f"|format(it.subtotal) }}</td>
+          <td><!-- optional remove button can be update to 0 --> </td>
+        </tr>
+      {% endfor %}
+    </table>
+    <p>Total: Rs {{ "%.2f"|format(total) }}</p>
+    <a href="{{ url_for('main.checkout') }}">Proceed to checkout</a>
+  {% else %}
+    <p>Your cart is empty.</p>
+  {% endif %}
+{% endblock %}

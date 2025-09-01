@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Products{% endblock %}
+{% block content %}
+  <h1>Products</h1>
+  <div class="grid">
+    {% for p in products %}
+      <div class="card">
+        <a href="{{ url_for('main.product_detail', product_id=p.id) }}">
+          <img src="{{ url_for('static', filename=p.image or 'images/default.png') }}" alt="{{ p.title }}">
+          <h3>{{ p.title }}</h3>
+        </a>
+        <p>Rs {{ "%.2f"|format(p.price) }}</p>
+        <form method="post" action="{{ url_for('main.add_to_cart', product_id=p.id) }}">
+          {{ csrf_token() }}
+          <input type="number" name="quantity" value="1" min="1">
+          <button type="submit">Add to cart</button>
+        </form>
+      </div>
+
+       <header>
+        <h1>My Mega Store</h1>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Products</a>
+            <a href="#">Cart</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="product-grid">
+            <!-- 50 products loop -->
+            <!-- Replace placeholder images with your actual product images -->
+            <!-- Example of one product card -->
+            <!-- Repeat similar divs 50 times -->
+            <!-- I'll use a small JS snippet below to auto-generate 50 products -->
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 My Mega Store</p>
+    </footer>
+
+    <script>
+        const grid = document.querySelector('.product-grid');
+        for(let i=1; i<=50; i++){
+            const product = document.createElement('div');
+            product.classList.add('product-card');
+            product.innerHTML = `
+                <img src="https://via.placeholder.com/150?text=Product+${i}" alt="Product ${i}">
+                <h3>Product ${i}</h3>
+                <p class="price">$${(Math.random()*100+10).toFixed(2)}</p>
+                <button>Add to Cart</button>
+            `;
+            grid.appendChild(product);
+        }
+    </script>
+    {% else %}
+      <p>No products yet.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

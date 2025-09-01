@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>{{ product.title }}</h2>
+  <img src="{{ url_for('static', filename=product.image or 'images/default.png') }}" alt="{{ product.title }}">
+  <p>{{ product.description }}</p>
+  <p>Price: Rs {{ "%.2f"|format(product.price) }}</p>
+  <form method="post" action="{{ url_for('main.add_to_cart', product_id=product.id) }}">
+    {{ csrf_token() }}
+    <input type="number" name="quantity" value="1" min="1">
+    <button type="submit">Add to cart</button>
+  </form>
+{% endblock %}

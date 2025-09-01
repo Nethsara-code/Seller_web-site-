@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Seller Dashboard</h2>
+  <a href="{{ url_for('main.add_product') }}">Add new product</a>
+  <ul>
+    {% for p in products %}
+      <li>{{ p.title }} — Rs {{ "%.2f"|format(p.price) }}</li>
+    {% else %}
+      <li>No products yet.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
+
